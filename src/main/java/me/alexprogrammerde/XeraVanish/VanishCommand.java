@@ -32,7 +32,7 @@ public class VanishCommand implements CommandExecutor, TabExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            if (XeraVanish.getPlugin(XeraVanish.class).isVanished(player)) {
+            if (xeravanish.isVanished(player)) {
                 if (player.hasPermission("playervanishplus.vanish")) {
                     vanishplayer.unvanishPlayer(player);
 

@@ -87,10 +87,6 @@ public class XeraVanish extends JavaPlugin {
         return gamemodelist.containsKey(player);
     }
 
-    public void reloadConfiguration() {
-        configuration = YamlConfiguration.loadConfiguration(file);
-    }
-
     public HashMap<Player, GameMode> getGamemodeList() {
         return gamemodelist;
     }
@@ -111,15 +107,7 @@ public class XeraVanish extends JavaPlugin {
         return taskidlist.containsKey(player);
     }
 
-    public HashMap<Player, Integer> getTaskIDlist() {
-        return taskidlist;
-    }
-
     public FileConfiguration getFileConfig() {
         return configuration;
-    }
-
-    public ConsoleCommandSender getConsole() {
-        return console;
     }
 }
