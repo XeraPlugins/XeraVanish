@@ -1,9 +1,9 @@
 package me.alexprogrammerde.XeraVanish;
 
-import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -45,27 +45,30 @@ public class XeraVanish extends JavaPlugin {
 
         configuration = YamlConfiguration.loadConfiguration(file);
 
-        String text = configuration.getString("text");
-
         console.sendMessage(prefix + "Registering listeners.");
         getServer().getPluginManager().registerEvents(new PlayerEvents(this),this);
 
         console.sendMessage(prefix + "Registering commands");
-        XeraVanish.getPlugin(XeraVanish.class).getServer().getPluginCommand("vanish").setExecutor(new VanishCommand(this));
+        PluginCommand vanish = getServer().getPluginCommand("vanish");
+
+        if (vanish != null) {
+            vanish.setExecutor(new VanishCommand(this));
+            vanish.setTabCompleter(new VanishCommand(this));
+        }
 
         console.sendMessage(prefix + "Checking for a newer version.");
         new UpdateChecker(this, 80763).getVersion(version -> {
             if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
                 console.sendMessage(prefix + "Your up to date!");
             } else {
-                console.sendMessage(prefix + "There is a new update available. Download it at: https://www.spigotmc.org/resources/playervanishplus.80763/updates (You may need to remove the old config to get a never one.)");
+                console.sendMessage(prefix + "There is a new update available. Download it at: https://www.spigotmc.org/resources/80763/updates (You may need to remove the old config to get a never one.)");
             }
         });
 
         console.sendMessage(prefix + "Loading metrics");
-        int pluginId = 8622;
-        Metrics metrics = new Metrics(this, pluginId);
+        new Metrics(this, 8622);
 
+        console.sendMessage(prefix + "Finished starting");
     }
 
     public GameMode getGamemode(Player player) {

@@ -8,10 +8,14 @@ import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-public class VanishCommand implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+
+public class VanishCommand implements CommandExecutor, TabExecutor {
     FileConfiguration config;
     VanishPlayer vanishplayer;
     XeraVanish xeravanish;
@@ -78,5 +82,10 @@ public class VanishCommand implements CommandExecutor {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
+        return new ArrayList<>();
     }
 }
