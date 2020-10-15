@@ -14,41 +14,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 public class XeraVanish extends JavaPlugin {
-    FileConfiguration configuration;
-    File file;
-    HashMap<Player, GameMode> gamemodelist = new HashMap<>();
-    JavaPlugin plugin;
-    ConsoleCommandSender console;
-    HashMap<Player, Integer> taskidlist = new HashMap<>();
+    private Logger console;
+    public final HashMap<Player, GameMode> gamemodelist = new HashMap<>();
+    public final HashMap<Player, Integer> taskidlist = new HashMap<>();
+    public VanishPlayer vanishPlayer;
 
     public void onEnable() {
-        plugin = this;
-        console = getServer().getConsoleSender();
-        String prefix = ChatColor.GREEN +  "[XeraVanish] ";
-        
-        console.sendMessage(prefix + "Loading config.");
-        if (!getDataFolder().exists()) {
-            getDataFolder().mkdir();
-        }
+        console = getLogger();
+        vanishPlayer = new VanishPlayer(this);
 
-        file = new File(getDataFolder(), "config.yml");
+        console.info("Loading config.");
+        saveDefaultConfig();
 
-        if (!file.exists()) {
-            try (InputStream in = getResource("config.yml")) {
-                Files.copy(in, file.toPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        configuration = YamlConfiguration.loadConfiguration(file);
-
-        console.sendMessage(prefix + "Registering listeners.");
+        console.info("Registering listeners.");
         getServer().getPluginManager().registerEvents(new PlayerEvents(this),this);
 
-        console.sendMessage(prefix + "Registering commands");
+        console.info("Registering commands");
         PluginCommand vanish = getServer().getPluginCommand("vanish");
 
         if (vanish != null) {
@@ -56,58 +40,22 @@ public class XeraVanish extends JavaPlugin {
             vanish.setTabCompleter(new VanishCommand(this));
         }
 
-        console.sendMessage(prefix + "Checking for a newer version.");
+        console.info("Checking for a newer version.");
         new UpdateChecker(this, 80763).getVersion(version -> {
             if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                console.sendMessage(prefix + "Your up to date!");
+                console.info("Your up to date!");
             } else {
-                console.sendMessage(prefix + "There is a new update available. Download it at: https://www.spigotmc.org/resources/80763/updates (You may need to remove the old config to get a never one.)");
+                console.info("There is a new update available. Download it at: https://www.spigotmc.org/resources/80763/updates (You may need to remove the old config to get a never one.)");
             }
         });
 
-        console.sendMessage(prefix + "Loading metrics");
+        console.info("Loading metrics");
         new Metrics(this, 8622);
 
-        console.sendMessage(prefix + "Finished starting");
-    }
-
-    public GameMode getGamemode(Player player) {
-        return gamemodelist.get(player);
-    }
-
-    public void putGamemode(Player player, GameMode mode) {
-        gamemodelist.put(player, mode);
-    }
-
-    public void removePlayer(Player player) {
-        gamemodelist.remove(player, getGamemode(player));
+        console.info("Finished starting");
     }
 
     public boolean isVanished(Player player) {
-        return gamemodelist.containsKey(player);
-    }
-
-    public HashMap<Player, GameMode> getGamemodeList() {
-        return gamemodelist;
-    }
-
-    public void putTaskID(Player player, Integer integer) {
-        taskidlist.put(player, integer);
-    }
-
-    public Integer getTaskID(Player player) {
-        return taskidlist.get(player);
-    }
-
-    public void removeScheduledPlayer(Player player) {
-        taskidlist.remove(player, getGamemode(player));
-    }
-
-    public boolean isScheduled(Player player) {
-        return taskidlist.containsKey(player);
-    }
-
-    public FileConfiguration getFileConfig() {
-        return configuration;
+        return gamemodelist.containsKey(player) && taskidlist.containsKey(player);
     }
 }

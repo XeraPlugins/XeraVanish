@@ -1,11 +1,13 @@
 name: XeraVanish
-version: 1.0.0
+version: ${project.version}
 main: me.alexprogrammerde.XeraVanish.XeraVanish
 author: AlexProgrammerDE
 description: A anarchy server oriented vanishing plugin.
 commands:
   vanish:
-    description: Command to vanish and unvanish yourself
+    description: Command to vanish and unvanish yourself.
+    permission: xeravanish.vanish
+    permission-message: You have no permission to do that!
 permissions:
   xeravanish.vanish:
-    description: Allows you to vanish and unvanish yourself
+    description: Allows you to vanish and unvanish yourself.

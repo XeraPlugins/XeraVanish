@@ -18,12 +18,8 @@ public class PlayerEvents implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if (xeravanish.isVanished(player)) {
-            event.setJoinMessage("");
-        }
-
-        for (Player vanishedplayer : xeravanish.getGamemodeList().keySet()) {
-            player.hidePlayer(xeravanish, vanishedplayer);
+        for (Player vanishedPlayer : xeravanish.gamemodelist.keySet()) {
+            player.hidePlayer(xeravanish, vanishedPlayer);
         }
     }
 
@@ -32,13 +28,12 @@ public class PlayerEvents implements Listener {
         Player player = event.getPlayer();
 
         if (xeravanish.isVanished(player)) {
-            event.setQuitMessage("");
-        }
+            event.setQuitMessage(null);
 
-        if (xeravanish.isScheduled(player)) {
-            Bukkit.getScheduler().cancelTask(xeravanish.getTaskID(player));
+            xeravanish.vanishPlayer.unvanishPlayer(player);
 
-            xeravanish.removeScheduledPlayer(player);
+            Bukkit.getScheduler().cancelTask(xeravanish.taskidlist.get(player));
+            xeravanish.taskidlist.remove(player);
         }
     }
 }
