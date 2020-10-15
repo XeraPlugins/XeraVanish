@@ -31,9 +31,6 @@ public class PlayerEvents implements Listener {
             event.setQuitMessage(null);
 
             xeravanish.vanishPlayer.unvanishPlayer(player);
-
-            Bukkit.getScheduler().cancelTask(xeravanish.taskidlist.get(player));
-            xeravanish.taskidlist.remove(player);
         }
     }
 }
