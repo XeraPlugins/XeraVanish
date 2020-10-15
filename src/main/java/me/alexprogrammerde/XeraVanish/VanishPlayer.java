@@ -18,7 +18,7 @@ public class VanishPlayer {
         xeraVanish.gamemodelist.put(vanishplayer, vanishplayer.getGameMode());
         vanishplayer.setGameMode(GameMode.CREATIVE);
 
-        Bukkit.broadcastMessage(xeraVanish.getConfig().getString("quitmessage").replaceAll("%playername%", vanishplayer.getDisplayName()));
+        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', xeraVanish.getConfig().getString("quitmessage").replaceAll("%playername%", vanishplayer.getDisplayName())));
 
         xeraVanish.taskidlist.put(vanishplayer, Bukkit.getScheduler().scheduleSyncRepeatingTask(xeraVanish, () -> {
             TextComponent actionbar = new TextComponent("You are vanished at the moment!");
@@ -38,7 +38,7 @@ public class VanishPlayer {
         unvanishplayer.setGameMode(xeraVanish.gamemodelist.get(unvanishplayer));
         xeraVanish.gamemodelist.remove(unvanishplayer);
 
-        Bukkit.broadcastMessage(xeraVanish.getConfig().getString("joinmessage").replaceAll("%playername%", unvanishplayer.getDisplayName()));
+        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', xeraVanish.getConfig().getString("joinmessage").replaceAll("%playername%", unvanishplayer.getDisplayName())));
 
         Bukkit.getScheduler().cancelTask(xeraVanish.taskidlist.get(unvanishplayer));
         xeraVanish.taskidlist.remove(unvanishplayer);
